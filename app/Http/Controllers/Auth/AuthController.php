@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -21,7 +24,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if(\Auth::attempt($request->only('email','password'))){
+        if(Auth::attempt($request->only('email','password'))){
             return redirect('home');
         }
 
@@ -48,7 +51,7 @@ class AuthController extends Controller
         User::create([
             'name'=>$request->name,
             'email'=>$request->email,
-            'password'=> \Hash::make($request->password)
+            'password'=> Hash::make($request->password)
         ]);
 
         // Redirect to the login page with success message
@@ -65,8 +68,8 @@ class AuthController extends Controller
     }
 
     public function logout(){
-        \Session::flush();
-        \Auth::logout();
+        Session::flush();
+        Auth::logout();
         return redirect('');
     }
 
